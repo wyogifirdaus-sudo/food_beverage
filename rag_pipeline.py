@@ -15,6 +15,7 @@
 # ============================================================
 
 import os
+import streamlit as st
 from dotenv import load_dotenv          # Untuk membaca file .env
 
 from langchain_community.document_loaders import TextLoader             # For changed knowledge documnet into format acceptable format for LangChain process.  Untuk mengubah knowledge document jadi format yang bisa diproses LangChain
@@ -146,7 +147,15 @@ def build_rag_pipeline():
     )
 
     # ------------------------------------------------------------------
-    # LANGKAH 6: LLM — Inisialisasi model bahasa via Groq
+    # LANGKAH 6: Amankan API
+    # ------------------------------------------------------------------
+    # Kode ini mmengambil dari Streamlit Secrets
+    if "GROQ_API_KEY" in st.secrets:
+        os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+    else:
+
+    # ------------------------------------------------------------------
+    # LANGKAH 7: LLM — Inisialisasi model bahasa via Groq
     # ------------------------------------------------------------------
     # Groq adalah platform yang menyediakan akses ke LLM dengan
     # kecepatan inferensi sangat tinggi.
@@ -158,7 +167,7 @@ def build_rag_pipeline():
     )
 
     # ------------------------------------------------------------------
-    # LANGKAH 7: PROMPT — Template instruksi untuk LLM
+    # LANGKAH 8: PROMPT — Template instruksi untuk LLM
     # ------------------------------------------------------------------
     prompt = PromptTemplate(
         template=SYSTEM_PROMPT_TEMPLATE,
@@ -166,7 +175,7 @@ def build_rag_pipeline():
     )
 
     # ------------------------------------------------------------------
-    # LANGKAH 8: CHAIN — Menggabungkan semua komponen
+    # LANGKAH 9: CHAIN — Menggabungkan semua komponen
     # ------------------------------------------------------------------
     # RetrievalQA menggabungkan Retriever + LLM + Prompt menjadi
     # satu pipeline yang bisa langsung menerima pertanyaan.
